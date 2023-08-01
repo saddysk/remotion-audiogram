@@ -1,33 +1,32 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Player } from "@remotion/player";
 import { AudiogramPlayer } from "./Player";
 import { AudiogramSchema } from "./Schema";
 import { Flex } from "@chakra-ui/react";
 import { IAudioInput } from "../interfaces/AudioInputInterface";
 
-const fps = 30;
+export const fps = 30;
 
 interface AudiogramProps {
   audioInputs: IAudioInput;
 }
 
 export const Audiogram: FC<AudiogramProps> = ({ audioInputs }) => {
-  const { title, audioFile, srtFile, coverImage } = audioInputs;
+  const { title, audioFile, srtFile, coverImage, duration } = audioInputs;
+
   const [durationInSeconds, setDurationInSeconds] = useState<number>();
 
-  // const audioFile = staticFile("audiogram/audio.mp3");
-  // const srtFile = staticFile("audiogram/subtitles.srt");
-  // const coverImage = staticFile("audiogram/cover.jpg");
+  useEffect(() => {
+    const audioDuration = (duration.endTime - duration.startTime) * 60;
 
-  const audio = new Audio(audioFile);
-  audio.addEventListener("loadedmetadata", () => {
-    const duration = Number(audio.duration.toFixed(1));
-    setDurationInSeconds(duration); // 29.5
-  });
+    setDurationInSeconds(Math.round(audioDuration));
+  }, [duration]);
 
   if (!durationInSeconds) {
     return <></>;
   }
+
+  const audioOffsetInSeconds = Math.round(duration.startTime * 60);
 
   return (
     <Flex justifyContent="center">
@@ -48,7 +47,7 @@ export const Audiogram: FC<AudiogramProps> = ({ audioInputs }) => {
         loop
         inputProps={{
           // !Audio settings
-          audioOffsetInSeconds: 0,
+          audioOffsetInSeconds,
 
           // !Title settings
           audioFileName: audioFile,

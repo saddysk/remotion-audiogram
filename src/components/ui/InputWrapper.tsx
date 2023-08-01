@@ -1,11 +1,18 @@
 import { FC, ReactNode } from "react";
-import { FormControl, FormHelperText, FormLabel } from "@chakra-ui/react";
+import {
+  Badge,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  HStack,
+} from "@chakra-ui/react";
 
 interface InputWrapperProps {
   id?: string;
   label?: string;
   description?: string;
   children?: ReactNode;
+  optional?: boolean;
 }
 
 const InputWrapper: FC<InputWrapperProps> = ({
@@ -13,14 +20,18 @@ const InputWrapper: FC<InputWrapperProps> = ({
   label,
   description,
   children,
+  optional = false,
   ...props
 }) => {
   return (
     <>
       <FormControl>
-        <FormLabel htmlFor={id} mb={2} {...props}>
-          {label}
-        </FormLabel>
+        <HStack justifyContent="space-between" mb={2}>
+          <FormLabel htmlFor={id} mb={0} {...props}>
+            {label}
+          </FormLabel>
+          {optional && <Badge variant="outline">Optional</Badge>}
+        </HStack>
         {children}
         {description && (
           <FormHelperText fontSize="sm">{description}</FormHelperText>

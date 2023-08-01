@@ -11,20 +11,25 @@ const AudiogramIndex: FC<AudiogramIndexProps> = () => {
   let [audioInputs, setAudioInputs] = useState<IAudioInput>(defaultAudioData);
 
   return (
-    <Grid templateColumns={["1fr", "1fr 1fr"]} p={10}>
-      <GridItem>
-        <AudioInputs handleUpload={(data) => setAudioInputs(data)} />
-      </GridItem>
-      <GridItem>
-        {!every(audioInputs, isEmpty) ? (
-          <Audiogram audioInputs={audioInputs} />
-        ) : (
-          <Flex alignItems="center" justifyContent="center" mt={10}>
-            <Text>Waiting for the files to upload...</Text>
-          </Flex>
-        )}
-      </GridItem>
-    </Grid>
+    <>
+      <Text fontSize="3xl" align="center" my={8}>
+        AudioGram
+      </Text>
+      <Grid templateColumns={["1fr", "1fr 1fr"]} p={10}>
+        <GridItem>
+          <AudioInputs handleUpload={(data) => setAudioInputs(data)} />
+        </GridItem>
+        <GridItem>
+          {!every(audioInputs, isEmpty) ? (
+            <Audiogram audioInputs={audioInputs} />
+          ) : (
+            <Flex alignItems="center" justifyContent="center">
+              <Text>Waiting for the files to upload...</Text>
+            </Flex>
+          )}
+        </GridItem>
+      </Grid>
+    </>
   );
 };
 

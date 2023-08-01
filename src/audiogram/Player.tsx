@@ -76,51 +76,56 @@ export const AudiogramPlayer: FC<AudiogramPlayerProps> = ({
   const audioOffsetInFrames = Math.round(audioOffsetInSeconds * fps);
 
   return (
-    <Sequence from={-audioOffsetInFrames}>
-      <Audio src={audioFileName} />
+    <>
+      <Audio
+        src={audioFileName}
+        startFrom={audioOffsetInFrames}
+        endAt={audioOffsetInFrames + durationInFrames}
+      />
+      <Sequence from={-audioOffsetInFrames}>
+        <div className="container">
+          <HStack alignItems="start" gap={12}>
+            {coverImgFileName && (
+              <Img
+                className="cover"
+                src={coverImgFileName}
+                style={{ width: "375px", height: "375px" }}
+              />
+            )}
 
-      <div className="container">
-        <HStack alignItems="start" gap={12}>
-          {coverImgFileName && (
-            <Img
-              className="cover"
-              src={coverImgFileName}
-              style={{ width: "375px", height: "375px" }}
+            <div style={{ color: titleColor }}>
+              <Text fontSize="7xl">{titleText}</Text>
+            </div>
+          </HStack>
+
+          <div>
+            <AudioWave
+              audioSrc={audioFileName}
+              mirrorWave={mirrorWave}
+              waveColor={waveColor}
+              numberOfSamples={Number(waveNumberOfSamples)}
+              freqRangeStartIndex={waveFreqRangeStartIndex}
+              waveLinesToDisplay={waveLinesToDisplay}
             />
-          )}
-
-          <div style={{ color: titleColor }}>
-            <Text fontSize="7xl">{titleText}</Text>
           </div>
-        </HStack>
 
-        <div>
-          <AudioWave
-            audioSrc={audioFileName}
-            mirrorWave={mirrorWave}
-            waveColor={waveColor}
-            numberOfSamples={Number(waveNumberOfSamples)}
-            freqRangeStartIndex={waveFreqRangeStartIndex}
-            waveLinesToDisplay={waveLinesToDisplay}
-          />
+          <div
+            style={{ lineHeight: `${subtitlesLineHeight}px` }}
+            className="captions"
+          >
+            <PaginatedSubtitles
+              subtitles={subtitles}
+              startFrame={audioOffsetInFrames}
+              endFrame={audioOffsetInFrames + durationInFrames}
+              linesPerPage={subtitlesLinePerPage}
+              subtitlesTextColor={subtitlesTextColor}
+              subtitlesZoomMeasurerSize={subtitlesZoomMeasurerSize}
+              subtitlesLineHeight={subtitlesLineHeight}
+              onlyDisplayCurrentSentence={onlyDisplayCurrentSentence}
+            />
+          </div>
         </div>
-
-        <div
-          style={{ lineHeight: `${subtitlesLineHeight}px` }}
-          className="captions"
-        >
-          <PaginatedSubtitles
-            subtitles={subtitles}
-            startFrame={audioOffsetInFrames}
-            endFrame={audioOffsetInFrames + durationInFrames}
-            linesPerPage={subtitlesLinePerPage}
-            subtitlesTextColor={subtitlesTextColor}
-            subtitlesZoomMeasurerSize={subtitlesZoomMeasurerSize}
-            subtitlesLineHeight={subtitlesLineHeight}
-            onlyDisplayCurrentSentence={onlyDisplayCurrentSentence}
-          />
-        </div>
-      </div>
-    </Sequence>
+      </Sequence>
+    </>
   );
 };
