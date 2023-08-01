@@ -18,7 +18,7 @@ export const defaultAudioData: IAudioInput = {
 };
 
 const AudioInputs: FC<AudioInputsProps> = ({ handleUpload }) => {
-  const { handleSubmit, register, setValue } = useForm<IAudioInput>({
+  const { handleSubmit, register, setValue, watch } = useForm<IAudioInput>({
     defaultValues: defaultAudioData,
   });
 
@@ -33,7 +33,11 @@ const AudioInputs: FC<AudioInputsProps> = ({ handleUpload }) => {
       </Text>
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack alignItems="start" w={"75%"} gap={6} mx="auto">
-          <InputWrapper id="videoTitle" label="Video title">
+          <InputWrapper
+            id="videoTitle"
+            label="Video title"
+            description="*optional"
+          >
             <InputText
               id="videoTitle"
               placeholder="Title"
@@ -44,7 +48,12 @@ const AudioInputs: FC<AudioInputsProps> = ({ handleUpload }) => {
           <InputWrapper id="audioFile" label="Audio file">
             <InputFile
               id="audioFile"
-              handleOnChange={(file) => setValue("audioFile", file)}
+              handleOnChange={(file, fileName) => {
+                setValue("audioFile", file);
+                if (!watch("title")) {
+                  setValue("title", fileName);
+                }
+              }}
             />
           </InputWrapper>
           <InputWrapper

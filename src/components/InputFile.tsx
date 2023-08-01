@@ -5,7 +5,7 @@ interface InputFileProps {
   id?: string;
   accept?: string;
   ref?: React.Ref<HTMLInputElement>;
-  handleOnChange: (value: string) => void;
+  handleOnChange: (value: string, fileName: string) => void;
 }
 
 const InputFile: FC<InputFileProps> = forwardRef<
@@ -21,7 +21,7 @@ const InputFile: FC<InputFileProps> = forwardRef<
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      handleOnChange(reader.result as string);
+      handleOnChange(reader.result as string, file.name);
     };
     reader.readAsDataURL(file as Blob);
   };
