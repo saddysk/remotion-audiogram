@@ -37,18 +37,18 @@ const AudioInputs: FC<AudioInputsProps> = ({ handleUpload }) => {
 
   const audioFileSrc = watch("audioFile");
 
+  const fetchDurationAsync = async () => {
+    const duration = await MediaDuration(audioFileSrc);
+
+    setDurationInSeconds(duration); // 29.5
+
+    const maxDurationInMins = Number((duration / 60).toFixed(1));
+    setAudioDuration({ ...audioDuration, endTime: maxDurationInMins });
+  };
+
   useEffect(() => {
-    const fetchDurationAsync = async () => {
-      const duration = await MediaDuration(audioFileSrc);
-
-      setDurationInSeconds(duration); // 29.5
-
-      const maxDurationInMins = Number((duration / 60).toFixed(1));
-      setAudioDuration({ ...audioDuration, endTime: maxDurationInMins });
-    };
-
     fetchDurationAsync();
-  }, [audioFileSrc, audioDuration]);
+  }, [audioFileSrc]);
 
   const onSubmit = (data: IAudioInput) => {
     if (

@@ -1,4 +1,4 @@
-import { NumberInput, NumberInputField, Stack } from "@chakra-ui/react";
+import { Input, Stack } from "@chakra-ui/react";
 import { Dispatch, FC, SetStateAction } from "react";
 import InputWrapper from "../ui/InputWrapper";
 import { IAudioDuration } from "../../interfaces/AudioInputInterface";
@@ -16,14 +16,24 @@ const AudioDuration: FC<AudioDurationProps> = ({
 }) => {
   const maxDurationInMins = Number((duration / 60).toFixed(1));
 
-  const handleStartTime = (value: string) => {
-    setAudioDuration({ ...audioDuration, startTime: Number(value) });
+  const handleStartTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(e.target.value);
+
+    if (value > audioDuration.endTime) {
+      setAudioDuration({ ...audioDuration, startTime: audioDuration.endTime });
+    } else {
+      setAudioDuration({ ...audioDuration, startTime: Number(value) });
+    }
   };
 
-  const handleEndTime = (value: string) => {
-    const endValue = Number(value);
+  const handleEndTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const endValue = Number(e.target.value);
 
-    setAudioDuration({ ...audioDuration, endTime: endValue });
+    if (endValue > maxDurationInMins) {
+      setAudioDuration({ ...audioDuration, endTime: maxDurationInMins });
+    } else {
+      setAudioDuration({ ...audioDuration, endTime: endValue });
+    }
 
     if (endValue < audioDuration.startTime) {
       setAudioDuration({ ...audioDuration, startTime: endValue });
@@ -38,31 +48,29 @@ const AudioDuration: FC<AudioDurationProps> = ({
           audioDuration.endTime ?? maxDurationInMins
         }`}
       >
-        <NumberInput
-          value={audioDuration.startTime}
+        <Input
+          type="number"
+          size="sm"
+          value={audioDuration.startTime.toString()}
           min={0}
           max={audioDuration.endTime ?? maxDurationInMins}
-          clampValueOnBlur={true}
           step={0.1}
           onChange={handleStartTime}
-        >
-          <NumberInputField />
-        </NumberInput>
+        />
       </InputWrapper>
       <InputWrapper
         label="End time"
         description={`min: ${0.1}; max: ${maxDurationInMins}`}
       >
-        <NumberInput
-          value={audioDuration.endTime}
+        <Input
+          type="number"
+          size="sm"
+          value={audioDuration.endTime.toString()}
           min={0.1}
           max={maxDurationInMins}
-          clampValueOnBlur={true}
           step={0.1}
           onChange={handleEndTime}
-        >
-          <NumberInputField />
-        </NumberInput>
+        />
       </InputWrapper>
     </Stack>
   );
