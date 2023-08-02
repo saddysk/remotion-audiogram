@@ -1,16 +1,16 @@
-import { FC, useState } from "react";
-import AudioInputs, { defaultAudioData } from "./Audio";
+import { FC } from "react";
+import AudioInput from "./Audio";
 import { Audiogram } from "../audiogram/Root";
 import { Flex, Grid, GridItem, Text } from "@chakra-ui/react";
-import { IAudioInput } from "../interfaces/AudioInputInterface";
+import useAudioContext from "../contexts/AudioContext";
 
 interface AudiogramIndexProps {}
 
 const AudiogramIndex: FC<AudiogramIndexProps> = () => {
-  let [audioInputs, setAudioInputs] = useState<IAudioInput>(defaultAudioData);
+  const { audioInput, setAudioInput } = useAudioContext();
 
   const hasRequiredInputs =
-    audioInputs.audioFile && audioInputs.srtFile && audioInputs.coverImage;
+    audioInput.audioFile && audioInput.srtFile && audioInput.coverImage;
 
   return (
     <>
@@ -19,11 +19,11 @@ const AudiogramIndex: FC<AudiogramIndexProps> = () => {
       </Text>
       <Grid templateColumns={["1fr", "1fr 1fr"]} p={10}>
         <GridItem>
-          <AudioInputs handleUpload={(data) => setAudioInputs(data)} />
+          <AudioInput handleUpload={(data) => setAudioInput(data)} />
         </GridItem>
         <GridItem>
           {hasRequiredInputs ? (
-            <Audiogram audioInputs={audioInputs} />
+            <Audiogram />
           ) : (
             <Flex alignItems="center" justifyContent="center">
               <Text>Waiting for the files to upload...</Text>

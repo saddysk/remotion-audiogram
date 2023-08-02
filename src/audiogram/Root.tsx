@@ -2,17 +2,16 @@ import { FC, useEffect, useState } from "react";
 import { Player } from "@remotion/player";
 import { AudiogramPlayer } from "./Player";
 import { AudiogramSchema } from "./Schema";
-import { Flex } from "@chakra-ui/react";
-import { IAudioInput } from "../interfaces/AudioInputInterface";
+import { VStack } from "@chakra-ui/react";
+import useAudioContext from "../contexts/AudioContext";
 
 export const fps = 30;
 
-interface AudiogramProps {
-  audioInputs: IAudioInput;
-}
+interface AudiogramProps {}
 
-export const Audiogram: FC<AudiogramProps> = ({ audioInputs }) => {
-  const { title, audioFile, srtFile, coverImage, duration } = audioInputs;
+export const Audiogram: FC<AudiogramProps> = () => {
+  const { audioInput } = useAudioContext();
+  const { title, audioFile, srtFile, coverImage, duration } = audioInput;
 
   const [durationInSeconds, setDurationInSeconds] = useState<number>();
 
@@ -29,7 +28,7 @@ export const Audiogram: FC<AudiogramProps> = ({ audioInputs }) => {
   const audioOffsetInSeconds = Math.round(duration.startTime * 60);
 
   return (
-    <Flex justifyContent="center">
+    <VStack justifyContent="center" gap={6}>
       <Player
         style={{
           width: "350px",
@@ -72,6 +71,8 @@ export const Audiogram: FC<AudiogramProps> = ({ audioInputs }) => {
           mirrorWave: true,
         }}
       />
-    </Flex>
+
+      {/* <Button colorScheme="blue">Render video</Button> */}
+    </VStack>
   );
 };

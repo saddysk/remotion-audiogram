@@ -7,21 +7,11 @@ import InputText from "../components/ui/InputText";
 import InputWrapper from "../components/ui/InputWrapper";
 import AudioDuration from "../components/audio/Duration";
 import { MediaDuration } from "../utils/file";
+import { defaultAudioData } from "../contexts/AudioContext";
 
 interface AudioInputsProps {
   handleUpload: (data: IAudioInput) => void;
 }
-
-export const defaultAudioData: IAudioInput = {
-  title: "",
-  audioFile: "",
-  coverImage: "",
-  srtFile: "",
-  duration: {
-    startTime: 0,
-    endTime: 0,
-  },
-};
 
 const AudioInputs: FC<AudioInputsProps> = ({ handleUpload }) => {
   const [durationInSeconds, setDurationInSeconds] = useState<number>();
@@ -118,7 +108,8 @@ const AudioInputs: FC<AudioInputsProps> = ({ handleUpload }) => {
             handleOnChange={(file) => setValue("coverImage", file)}
           />
         </InputWrapper>
-        <Button colorScheme="teal" type="submit">
+
+        <Button colorScheme="cyan" type="submit">
           Upload
         </Button>
       </VStack>
