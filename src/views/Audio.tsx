@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import InputFile from "../components/ui/InputFile";
 import { Button, VStack } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
@@ -27,18 +27,18 @@ const AudioInputs: FC<AudioInputsProps> = ({ handleUpload }) => {
 
   const audioFileSrc = watch("audioFile");
 
-  const fetchDurationAsync = async () => {
-    const duration = await MediaDuration(audioFileSrc);
+  useCallback(() => {
+    const fetchDurationAsync = async () => {
+      const duration = await MediaDuration(audioFileSrc);
 
-    setDurationInSeconds(duration); // 29.5
+      setDurationInSeconds(duration);
 
-    const maxDurationInMins = Number((duration / 60).toFixed(1));
-    setAudioDuration({ ...audioDuration, endTime: maxDurationInMins });
-  };
+      const maxDurationInMins = Number((duration / 60).toFixed(1));
+      setAudioDuration({ ...audioDuration, endTime: maxDurationInMins });
+    };
 
-  useEffect(() => {
     fetchDurationAsync();
-  }, [audioFileSrc]);
+  }, [audioFileSrc, audioDuration]);
 
   const onSubmit = (data: IAudioInput) => {
     if (
