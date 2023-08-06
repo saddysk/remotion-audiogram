@@ -67,4 +67,4 @@ function formatTime(seconds: number) {
   return time.replace(".", ",");
 }
 
-function name(params: type) {}
+// function name(params: type) {}
