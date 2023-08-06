@@ -17,12 +17,12 @@ export const AudiogramSchema = z.object({
         s.endsWith(".bmp"),
       {
         message: "Subtitles file must be a .jpg / .jpeg / .png / .bmp file",
-      },
+      }
     ),
   titleText: z.string(),
   titleColor: zColor(),
 
-  subtitlesFileName: z.string().refine((s) => s.endsWith(".srt"), {
+  subtitles: z.string().refine((s) => s.endsWith(".srt"), {
     message: "Subtitles file must be a .srt file",
   }),
   onlyDisplayCurrentSentence: z.boolean(),

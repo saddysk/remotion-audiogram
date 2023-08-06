@@ -20,9 +20,9 @@ const AudioDuration: FC<AudioDurationProps> = ({
     const value = Number(e.target.value);
 
     if (value > audioDuration.endTime) {
-      setAudioDuration({ ...audioDuration, startTime: audioDuration.endTime });
-    } else {
       setAudioDuration({ ...audioDuration, startTime: Number(value) });
+    } else {
+      setAudioDuration({ ...audioDuration, startTime: audioDuration.endTime });
     }
   };
 
@@ -45,15 +45,17 @@ const AudioDuration: FC<AudioDurationProps> = ({
       <InputWrapper
         label="Start time"
         description={`min: ${0}; max: ${
-          audioDuration.endTime ?? maxDurationInMins
+          audioDuration.endTime || maxDurationInMins
         }`}
       >
         <Input
           type="number"
           size="sm"
-          value={audioDuration.startTime.toString()}
+          value={
+            audioDuration.startTime ? audioDuration.startTime.toString() : 0
+          }
           min={0}
-          max={audioDuration.endTime ?? maxDurationInMins}
+          max={audioDuration.endTime || maxDurationInMins}
           step={0.1}
           onChange={handleStartTime}
         />
@@ -65,7 +67,11 @@ const AudioDuration: FC<AudioDurationProps> = ({
         <Input
           type="number"
           size="sm"
-          value={audioDuration.endTime.toString()}
+          value={
+            audioDuration.endTime
+              ? audioDuration.endTime.toString()
+              : maxDurationInMins
+          }
           min={0.1}
           max={maxDurationInMins}
           step={0.1}

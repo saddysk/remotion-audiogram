@@ -5,7 +5,7 @@ interface InputFileProps {
   id?: string;
   accept?: string;
   ref?: React.Ref<HTMLInputElement>;
-  handleOnChange: (value: string, fileName: string) => void;
+  handleOnChange: (value: string, file?: File) => void;
 }
 
 const InputFile: FC<InputFileProps> = forwardRef<
@@ -13,15 +13,18 @@ const InputFile: FC<InputFileProps> = forwardRef<
   InputFileProps
 >(({ handleOnChange, ...props }, forwardedRef) => {
   const handleChange = (e: any) => {
-    const file = e.target.files?.[0];
+    const file: File = e.target.files?.[0];
 
     if (!file) {
       return;
     }
 
+    const fileExtension = file.name.split(".").pop();
+    const isMp3 = fileExtension === "mp3";
+
     const reader = new FileReader();
     reader.onloadend = () => {
-      handleOnChange(reader.result as string, file.name);
+      handleOnChange(reader.result as string, isMp3 ? file : undefined);
     };
     reader.readAsDataURL(file as Blob);
   };

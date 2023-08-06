@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from "react";
+import { FC, useState } from "react";
 import InputFile from "../components/ui/InputFile";
 import { Button, VStack } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
@@ -6,8 +6,8 @@ import { IAudioDuration, IAudioInput } from "../interfaces/AudioInputInterface";
 import InputText from "../components/ui/InputText";
 import InputWrapper from "../components/ui/InputWrapper";
 import AudioDuration from "../components/audio/Duration";
-import { MediaDuration } from "../utils/file";
 import { defaultAudioData } from "../contexts/AudioContext";
+import InputAudio, { IInputAudioData } from "../components/audio/InputAudio";
 
 interface AudioInputsProps {
   handleUpload: (data: IAudioInput) => void;
@@ -15,30 +15,14 @@ interface AudioInputsProps {
 
 const AudioInputs: FC<AudioInputsProps> = ({ handleUpload }) => {
   const [durationInSeconds, setDurationInSeconds] = useState<number>();
-  const [audioDuration, setAudioDuration] = useState<IAudioDuration>({
-    startTime: 0,
-    endTime: 0,
-  });
+  const [audioDuration, setAudioDuration] = useState<IAudioDuration>(
+    defaultAudioData.duration
+  );
 
   const { handleSubmit, register, setValue, getValues, watch } =
     useForm<IAudioInput>({
       defaultValues: defaultAudioData,
     });
-
-  const audioFileSrc = watch("audioFile");
-
-  useCallback(() => {
-    const fetchDurationAsync = async () => {
-      const duration = await MediaDuration(audioFileSrc);
-
-      setDurationInSeconds(duration);
-
-      const maxDurationInMins = Number((duration / 60).toFixed(1));
-      setAudioDuration({ ...audioDuration, endTime: maxDurationInMins });
-    };
-
-    fetchDurationAsync();
-  }, [audioFileSrc, audioDuration]);
 
   const onSubmit = (data: IAudioInput) => {
     if (
@@ -50,6 +34,17 @@ const AudioInputs: FC<AudioInputsProps> = ({ handleUpload }) => {
     }
 
     handleUpload({ ...data, duration: audioDuration });
+  };
+
+  const onChangeFileData = (data: IInputAudioData) => {
+    const { value: fileSrc, fileName, srtData, duration } = data;
+
+    setValue("audioFile", fileSrc);
+    setDurationInSeconds(duration);
+    setValue("srtFile", srtData);
+    if (!watch("title")) {
+      setValue("title", fileName);
+    }
   };
 
   return (
@@ -64,17 +59,7 @@ const AudioInputs: FC<AudioInputsProps> = ({ handleUpload }) => {
           />
         </InputWrapper>
 
-        <InputWrapper id="audioFile" label="Audio file">
-          <InputFile
-            id="audioFile"
-            handleOnChange={(file, fileName) => {
-              setValue("audioFile", file);
-              if (!watch("title")) {
-                setValue("title", fileName);
-              }
-            }}
-          />
-        </InputWrapper>
+        <InputAudio handleAudioUpload={onChangeFileData} />
 
         {durationInSeconds && (
           <InputWrapper
@@ -89,17 +74,6 @@ const AudioInputs: FC<AudioInputsProps> = ({ handleUpload }) => {
             />
           </InputWrapper>
         )}
-
-        <InputWrapper
-          id="audioSrt"
-          label="SRT file"
-          description="Transcripted audio file."
-        >
-          <InputFile
-            id="audioSrt"
-            handleOnChange={(file) => setValue("srtFile", file)}
-          />
-        </InputWrapper>
 
         <InputWrapper id="coverImage" label="Cover image for the video">
           <InputFile

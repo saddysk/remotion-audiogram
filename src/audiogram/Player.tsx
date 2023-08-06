@@ -1,12 +1,5 @@
-import { FC, useEffect, useState } from "react";
-import {
-  Audio,
-  Img,
-  Sequence,
-  continueRender,
-  delayRender,
-  useVideoConfig,
-} from "remotion";
+import { FC } from "react";
+import { Audio, Img, Sequence, useVideoConfig } from "remotion";
 import { PaginatedSubtitles } from "./Subtitles";
 import "./style.css";
 import { AudioWave } from "./AudioWave";
@@ -20,7 +13,7 @@ interface AudiogramPlayerProps {
   titleText: string;
   titleColor: string;
 
-  subtitlesFileName: string;
+  subtitles: string;
   onlyDisplayCurrentSentence: boolean;
   subtitlesTextColor: string;
   subtitlesLinePerPage: number;
@@ -40,7 +33,7 @@ export const AudiogramPlayer: FC<AudiogramPlayerProps> = ({
   coverImgFileName,
   titleText,
   titleColor,
-  subtitlesFileName,
+  subtitles,
   onlyDisplayCurrentSentence,
   subtitlesTextColor,
   subtitlesLinePerPage,
@@ -53,21 +46,6 @@ export const AudiogramPlayer: FC<AudiogramPlayerProps> = ({
   mirrorWave,
 }) => {
   const { durationInFrames, fps } = useVideoConfig();
-
-  const [handle] = useState(() => delayRender());
-  const [subtitles, setSubtitles] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch(subtitlesFileName)
-      .then((res) => res.text())
-      .then((text) => {
-        setSubtitles(text);
-        continueRender(handle);
-      })
-      .catch((err) => {
-        console.log("Error fetching subtitles", err);
-      });
-  }, [handle, subtitlesFileName]);
 
   if (!subtitles) {
     return null;

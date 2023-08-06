@@ -56,7 +56,7 @@ export const Audiogram: FC<AudiogramProps> = () => {
           titleColor: "rgba(186, 186, 186, 0.93)",
 
           // !Subtitles settings
-          subtitlesFileName: srtFile,
+          subtitles: srtFile,
           onlyDisplayCurrentSentence: true,
           subtitlesTextColor: "rgba(255, 255, 255, 0.93)",
           subtitlesLinePerPage: 4,
