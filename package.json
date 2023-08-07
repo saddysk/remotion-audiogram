@@ -33,6 +33,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "render": "remotion render /src/audiogram/index.ts Audiogram out/video.mp4",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
