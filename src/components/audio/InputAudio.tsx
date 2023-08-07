@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import InputWrapper from "../ui/InputWrapper";
 import InputFile from "../ui/InputFile";
 import { getTranscription } from "./transcription";
@@ -15,7 +15,11 @@ interface InputAudioProps {
 }
 
 const InputAudio: FC<InputAudioProps> = ({ handleAudioUpload }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const onChange = async (value: string, file?: File) => {
+    setIsLoading(true);
+
     if (!file) {
       return;
     }
@@ -28,11 +32,16 @@ const InputAudio: FC<InputAudioProps> = ({ handleAudioUpload }) => {
     const { srtData, duration } = transcription;
 
     handleAudioUpload({ value, fileName: file.name, srtData, duration });
+    setIsLoading(false);
   };
 
   return (
     <>
-      <InputWrapper id="audioFile" label="Audio file">
+      <InputWrapper
+        id="audioFile"
+        label="Audio file"
+        description={isLoading ? "Loading..." : ""}
+      >
         <InputFile id="audioFile" handleOnChange={onChange} />
       </InputWrapper>
     </>
