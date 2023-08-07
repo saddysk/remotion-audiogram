@@ -54,7 +54,7 @@ function createSRT(wordsJson: IWordJson[]): string {
 
     srtContent += `${index}\n`;
     srtContent += `${startTime} --> ${endTime}\n`;
-    srtContent += `${item.word}\n\n`;
+    srtContent += `${item.punctuated_word}\n\n`;
 
     index++;
   }
@@ -67,4 +67,23 @@ function formatTime(seconds: number) {
   return time.replace(".", ",");
 }
 
-// function name(params: type) {}
+// async function getTranscriptionUsingWhisperAI(file: File) {
+//   const URL = `https://api.openai.com/v1/audio/transcriptions`;
+
+//   const formData = new FormData();
+//   formData.append("file", file);
+//   formData.append("model", process.env.REACT_APP_OPENAI_MODEL as string);
+//   formData.append("response_format", "srt");
+
+//   const headers = {
+//     Authorization: `Bearer ${process.env.REACT_APP_OPENAI_KEY}`,
+//   };
+
+//   const response = await axios.post(URL, formData, { headers });
+
+//   if (response.status !== 200) {
+//     return;
+//   }
+
+//   return response.data;
+// }
