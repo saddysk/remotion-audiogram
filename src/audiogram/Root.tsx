@@ -25,9 +25,9 @@ const RemotionRoot: FC<RemotionRootProps> = () => {
 
           // Title settings
           //   TODO: #3
-          audioFileName: staticFile("audio.mp3"),
+          audioFileName: staticFile("audiogram/audio.mp3"),
           //   TODO: #4
-          coverImgFileName: staticFile("cover.jpg"),
+          coverImgFileName: staticFile("audiogram/cover.jpg"),
           //   TODO: #5
           titleText:
             "#234 – Money, Kids, and Choosing Your Market with Justin Jackson of Transistor.fm",
@@ -35,7 +35,7 @@ const RemotionRoot: FC<RemotionRootProps> = () => {
 
           // Subtitles settings
           //   TODO: #6
-          subtitles: staticFile("subtitles.srt"),
+          subtitles: staticFile("audiogram/subtitles.srt"),
           onlyDisplayCurrentSentence: true,
           subtitlesTextColor: "rgba(255, 255, 255, 0.93)",
           subtitlesLinePerPage: 3,

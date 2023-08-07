@@ -1,5 +1,12 @@
-import { FC, useRef } from "react";
-import { Audio, Img, Sequence, useVideoConfig } from "remotion";
+import { FC, useEffect, useRef, useState } from "react";
+import {
+  Audio,
+  Img,
+  Sequence,
+  continueRender,
+  delayRender,
+  useVideoConfig,
+} from "remotion";
 import { PaginatedSubtitles } from "./Subtitles";
 import { AudioWave } from "./AudioWave";
 import { HStack, Text } from "@chakra-ui/react";
@@ -30,8 +37,23 @@ export const AudiogramComposition: FC<AudiogramCompositionSchemaType> = ({
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { durationInFrames } = useVideoConfig();
+  const [handle] = useState(() => delayRender());
 
-  if (!subtitles) {
+  const [subtitlesText, setSubtitlesText] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch(subtitles)
+      .then((res) => res.text())
+      .then((text) => {
+        setSubtitlesText(text);
+        continueRender(handle);
+      })
+      .catch((err) => {
+        console.log("Error fetching subtitles", err);
+      });
+  }, [handle, subtitles]);
+
+  if (!subtitlesText) {
     return null;
   }
 
@@ -76,7 +98,7 @@ export const AudiogramComposition: FC<AudiogramCompositionSchemaType> = ({
             className="captions"
           >
             <PaginatedSubtitles
-              subtitles={subtitles}
+              subtitles={subtitlesText}
               startFrame={audioOffsetInFrames}
               endFrame={audioOffsetInFrames + durationInFrames}
               linesPerPage={subtitlesLinePerPage}
