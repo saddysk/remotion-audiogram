@@ -1,6 +1,6 @@
 import { FC } from "react";
 import AudioInput from "./Audio";
-import { Audiogram } from "../audiogram/Root";
+import { Audiogram } from "../audiogram/Audiogram";
 import { Flex, Grid, GridItem, Text } from "@chakra-ui/react";
 import useAudioContext from "../contexts/AudioContext";
 

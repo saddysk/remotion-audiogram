@@ -42,7 +42,7 @@ const InputAudio: FC<InputAudioProps> = ({ handleAudioUpload }) => {
         label="Audio file"
         description={isLoading ? "Loading..." : ""}
       >
-        <InputFile id="audioFile" handleOnChange={onChange} />
+        <InputFile id="audioFile" accept="audio/*" handleOnChange={onChange} />
       </InputWrapper>
     </>
   );

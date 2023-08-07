@@ -36,11 +36,10 @@ export const AudioWave: FC<AudioWaveProps> = ({
   });
 
   // Pick the low values because they look nicer than high values
-  // feel free to play around :)
   const frequencyDataSubset = frequencyData.slice(
     freqRangeStartIndex,
     freqRangeStartIndex +
-      (mirrorWave ? Math.round(waveLinesToDisplay / 2) : waveLinesToDisplay),
+      (mirrorWave ? Math.round(waveLinesToDisplay / 2) : waveLinesToDisplay)
   );
 
   const frequencesToDisplay = mirrorWave

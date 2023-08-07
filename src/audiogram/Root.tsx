@@ -1,78 +1,63 @@
-import { FC, useEffect, useState } from "react";
-import { Player } from "@remotion/player";
-import { AudiogramPlayer } from "./Player";
+import { FC } from "react";
+import "./style.css";
+import { Composition, staticFile } from "remotion";
+import { AudiogramComposition, fps } from "./Composition";
 import { AudiogramSchema } from "./Schema";
-import { VStack } from "@chakra-ui/react";
-import useAudioContext from "../contexts/AudioContext";
 
-export const fps = 30;
+interface RemotionRootProps {}
 
-interface AudiogramProps {}
-
-export const Audiogram: FC<AudiogramProps> = () => {
-  const { audioInput } = useAudioContext();
-  const { title, audioFile, srtFile, coverImage, duration } = audioInput;
-
-  const [durationInSeconds, setDurationInSeconds] = useState<number>();
-
-  useEffect(() => {
-    const audioDuration = (duration.endTime - duration.startTime) * 60;
-
-    setDurationInSeconds(Math.round(audioDuration));
-  }, [duration]);
-
-  if (!durationInSeconds) {
-    return <></>;
-  }
-
-  const audioOffsetInSeconds = Math.round(duration.startTime * 60);
-
+const RemotionRoot: FC<RemotionRootProps> = () => {
   return (
-    <VStack justifyContent="center" gap={6}>
-      <Player
-        style={{
-          width: "350px",
-          height: "475px",
-          borderRadius: "12px",
-          backgroundColor: "#1b1a18",
-        }}
-        component={AudiogramPlayer}
-        schema={AudiogramSchema}
-        compositionWidth={1920}
-        compositionHeight={1080}
+    <>
+      <Composition
+        id="Audiogram"
+        component={AudiogramComposition}
         fps={fps}
-        durationInFrames={durationInSeconds * fps}
-        controls
-        loop
-        inputProps={{
-          // !Audio settings
-          audioOffsetInSeconds,
+        width={1920}
+        height={1080}
+        schema={AudiogramSchema}
+        defaultProps={{
+          // Audio settings
+          //   TODO: #1
+          durationInSeconds: 29.5,
+          //   TODO: #2
+          audioOffsetInSeconds: 6.9,
 
-          // !Title settings
-          audioFileName: audioFile,
-          coverImgFileName: coverImage,
-          titleText: title ?? "Video title",
-          // "#234 – Money, Kids, and Choosing Your Market with Justin Jackson of Transistor.fm",
+          // Title settings
+          //   TODO: #3
+          audioFileName: staticFile("audio.mp3"),
+          //   TODO: #4
+          coverImgFileName: staticFile("cover.jpg"),
+          //   TODO: #5
+          titleText:
+            "#234 – Money, Kids, and Choosing Your Market with Justin Jackson of Transistor.fm",
           titleColor: "rgba(186, 186, 186, 0.93)",
 
-          // !Subtitles settings
-          subtitles: srtFile,
+          // Subtitles settings
+          //   TODO: #6
+          subtitles: staticFile("subtitles.srt"),
           onlyDisplayCurrentSentence: true,
           subtitlesTextColor: "rgba(255, 255, 255, 0.93)",
-          subtitlesLinePerPage: 4,
+          subtitlesLinePerPage: 3,
           subtitlesZoomMeasurerSize: 10,
           subtitlesLineHeight: 98,
 
-          // !Wave settings
+          // Wave settings
           waveColor: "#a3a5ae",
           waveFreqRangeStartIndex: 7,
-          waveLinesToDisplay: 29,
+          waveLinesToDisplay: 40,
           waveNumberOfSamples: "256", // This is string for Remotion controls and will be converted to a number
           mirrorWave: true,
         }}
+        calculateMetadata={({ props }) => {
+          return {
+            durationInFrames: props.durationInSeconds * fps,
+            props,
+          };
+        }}
       />
-
-      {/* <Button colorScheme="blue">Render video</Button> */}
-    </VStack>
+    </>
   );
 };
+
+export default RemotionRoot;

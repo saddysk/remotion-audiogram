@@ -3,30 +3,14 @@ import { Audio, Img, Sequence, useVideoConfig } from "remotion";
 import { PaginatedSubtitles } from "./Subtitles";
 import { AudioWave } from "./AudioWave";
 import { HStack, Text } from "@chakra-ui/react";
+import { AudiogramSchema } from "./Schema";
+import { z } from "zod";
 
-interface AudiogramPlayerProps {
-  audioOffsetInSeconds: number;
+export const fps = 30;
 
-  audioFileName: string;
-  coverImgFileName: string;
-  titleText: string;
-  titleColor: string;
+type AudiogramCompositionSchemaType = z.infer<typeof AudiogramSchema>;
 
-  subtitles: string;
-  onlyDisplayCurrentSentence: boolean;
-  subtitlesTextColor: string;
-  subtitlesLinePerPage: number;
-  subtitlesZoomMeasurerSize: number;
-  subtitlesLineHeight: number;
-
-  waveColor: string;
-  waveFreqRangeStartIndex: number;
-  waveLinesToDisplay: number;
-  waveNumberOfSamples: string;
-  mirrorWave: boolean;
-}
-
-export const AudiogramPlayer: FC<AudiogramPlayerProps> = ({
+export const AudiogramComposition: FC<AudiogramCompositionSchemaType> = ({
   audioOffsetInSeconds,
   audioFileName,
   coverImgFileName,
@@ -45,7 +29,7 @@ export const AudiogramPlayer: FC<AudiogramPlayerProps> = ({
   mirrorWave,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const { durationInFrames, fps } = useVideoConfig();
+  const { durationInFrames } = useVideoConfig();
 
   if (!subtitles) {
     return null;

@@ -1,4 +1,4 @@
 import { registerRoot } from "remotion";
-import { Audiogram } from "./Root";
+import RemotionRoot from "./Root";
 
-registerRoot(Audiogram);
+registerRoot(RemotionRoot);

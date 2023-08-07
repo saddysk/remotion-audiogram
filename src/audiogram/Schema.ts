@@ -2,6 +2,7 @@ import { z } from "zod";
 import { zColor } from "@remotion/zod-types";
 
 export const AudiogramSchema = z.object({
+  durationInSeconds: z.number().positive(),
   audioOffsetInSeconds: z.number().min(0),
 
   audioFileName: z.string().refine((s) => s.endsWith(".mp3"), {
