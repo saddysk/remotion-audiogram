@@ -1,5 +1,5 @@
 import { Input, Stack } from "@chakra-ui/react";
-import { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, FC, SetStateAction, useEffect } from "react";
 import InputWrapper from "../ui/InputWrapper";
 import { IAudioDuration } from "../../interfaces/AudioInputInterface";
 
@@ -20,9 +20,9 @@ const AudioDuration: FC<AudioDurationProps> = ({
     const value = Number(e.target.value);
 
     if (value > audioDuration.endTime) {
-      setAudioDuration({ ...audioDuration, startTime: Number(value) });
-    } else {
       setAudioDuration({ ...audioDuration, startTime: audioDuration.endTime });
+    } else {
+      setAudioDuration({ ...audioDuration, startTime: Number(value) });
     }
   };
 
@@ -40,22 +40,25 @@ const AudioDuration: FC<AudioDurationProps> = ({
     }
   };
 
+  useEffect(() => {
+    setAudioDuration({
+      startTime: 0,
+      endTime: maxDurationInMins,
+    });
+  }, [maxDurationInMins, setAudioDuration]);
+
   return (
     <Stack direction={["column", "row"]}>
       <InputWrapper
         label="Start time"
-        description={`min: ${0}; max: ${
-          audioDuration.endTime || maxDurationInMins
-        }`}
+        description={`min: ${0}; max: ${audioDuration.endTime}`}
       >
         <Input
           type="number"
           size="sm"
-          value={
-            audioDuration.startTime ? audioDuration.startTime.toString() : 0
-          }
+          value={audioDuration.startTime.toString()}
           min={0}
-          max={audioDuration.endTime || maxDurationInMins}
+          max={audioDuration.endTime}
           step={0.1}
           onChange={handleStartTime}
         />
@@ -67,11 +70,7 @@ const AudioDuration: FC<AudioDurationProps> = ({
         <Input
           type="number"
           size="sm"
-          value={
-            audioDuration.endTime
-              ? audioDuration.endTime.toString()
-              : maxDurationInMins
-          }
+          value={audioDuration.endTime.toString()}
           min={0.1}
           max={maxDurationInMins}
           step={0.1}
